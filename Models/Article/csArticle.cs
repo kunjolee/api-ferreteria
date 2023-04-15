@@ -159,7 +159,32 @@ namespace api_ferreteria.Models.article
 
                 //vamos a llenar la tabla temporal dataAdapter a una tabla completa "dsi-DataSet"
                 da.Fill(dsi);
-                dsi.Tables[0].TableName = "List"; //agregar un nombre a la tabla
+                dsi.Tables[0].TableName = "Articles"; //agregar un nombre a la tabla
+                return dsi;
+
+            }catch(Exception e)
+            {
+                return null; 
+            }
+        }
+        public DataSet listArticlesById(int idArticulo) {
+
+            DataSet dsi = new DataSet();
+            string connection = System.Configuration.ConfigurationManager.ConnectionStrings["cnConection"].ConnectionString;
+
+            SqlConnection cn = new SqlConnection(connection);
+            cn.Open();
+
+            try
+            {
+                string query = "select * from Articulo where idArticulo="+idArticulo+"";
+
+                SqlCommand cmd = new SqlCommand(query, cn);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+                da.Fill(dsi);
+                dsi.Tables[0].TableName = "Article"; 
                 return dsi;
 
             }catch(Exception e)

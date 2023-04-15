@@ -38,6 +38,13 @@ namespace api_ferreteria.Controllers
             return Ok(new csArticle().listArticles());
         }
 
+        [HttpGet]
+        [Route("listArticlesById")]
+        public dynamic listArticlesById(string idArticulo) {
+            
+            return Ok(new csArticle().listArticlesById(Int32.Parse(idArticulo)));
+        }
+
     }
 }
 
