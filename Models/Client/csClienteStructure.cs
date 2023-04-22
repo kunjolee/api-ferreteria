@@ -19,7 +19,7 @@
 
         public class requestDeleteCliente
         {
-            public int idArticulo { get; set; }
+            public int idClient { get; set; }
         }
 
     }

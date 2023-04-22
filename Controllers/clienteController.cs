@@ -15,7 +15,7 @@ namespace api_ferreteria.Controllers
 
         [HttpPost]
         [Route("saveCliente")]
-        public dynamic saveArticle(requesClient model)
+        public dynamic saveClient(requesClient model)
         {
             return Ok(new csCliente().insertClient(model.nombre, model.apellido, model.DPI));
 
@@ -31,26 +31,26 @@ namespace api_ferreteria.Controllers
 
 
         [HttpPost]
-        [Route("deleteArticle")]
-        public dynamic deleteArticle(requestDeleteCliente model)
+        [Route("deleteClient")]
+        public dynamic deleteClient(requestDeleteCliente model)
         {
-            return Ok(new csArticle().deleteArticle(model.idArticulo));
+            return Ok(new csCliente().deleteClient(model.idClient));
 
         }
 
         [HttpGet]
         [Route("listClient")]
-        public dynamic listArticles()
+        public dynamic listClients()
         {
             return Ok(new csCliente().listClient());
         }
 
         [HttpGet]
         [Route("listClientById")]
-        public dynamic listArticlesById(string IdCliente)
+        public dynamic listClientsById(string IdCliente)
         {
 
-            return Ok(new csArticle().listArticlesById(Int32.Parse(IdCliente)));
+            return Ok(new csCliente().listArticlesById(Int32.Parse(IdCliente)));
         }
 
 
