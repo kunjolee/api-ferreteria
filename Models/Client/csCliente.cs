@@ -1,6 +1,7 @@
 ﻿
 using System.Data;
 using System.Data.SqlClient;
+using static api_ferreteria.Models.article.csArticleStructure;
 using static api_ferreteria.Models.Client.csClienteStructure;
 
 namespace api_ferreteria.Models.Client
@@ -24,7 +25,7 @@ namespace api_ferreteria.Models.Client
 
 
                 string query = "insert into Cliente(nombre,apellido,DPI) values " +
-                    " ('" + nombre + "', " + apellido + ", " + DPI + " )";
+                    " ('" + nombre + "', '" + apellido + "', '" + DPI + "' )";
 
                 cn.Open();
 
@@ -64,7 +65,7 @@ namespace api_ferreteria.Models.Client
 
 
                 string query = "update Cliente " +
-                "set nombre = '" + nombre + "', apellido = " + apellido + ", DPI = " + DPI + " " + "where IdClient = " +IdCliente+ " ";
+                "set nombre = '" + nombre + "', apellido = '" + apellido + "', DPI = '" + DPI + "' where IdCliente = " +IdCliente+ " ";
 
                 cn.Open();
 
@@ -91,7 +92,8 @@ namespace api_ferreteria.Models.Client
             return result;
 
         }
-        public responseClient deleteClient(int IdCliente)
+
+        public responseClient deleteClient(int idCliente)
         {
 
             responseClient result = new responseClient();
@@ -105,13 +107,13 @@ namespace api_ferreteria.Models.Client
                 cn = new SqlConnection(connection);
 
 
-                string query = "delete from Cliente where IdCliente = " + IdCliente + "";
+                string query = "delete from Cliente where IdCliente = " + idCliente + "";
 
                 cn.Open();
 
                 SqlCommand cmd = new SqlCommand(query, cn);
 
-                result.response = cmd.ExecuteNonQuery();
+                result.response = cmd.ExecuteNonQuery();//ejecuta el query en la db -> 1 | 0
 
                 if (result.response == 0)
                 {
@@ -124,7 +126,7 @@ namespace api_ferreteria.Models.Client
             catch (Exception e)
             {
                 result.response = 0;
-                result.response_description = "Error deliting Cient: " + e.Message.ToString();
+                result.response_description = "Error deliting Client: " + e.Message.ToString();
             }
 
             cn.Close();

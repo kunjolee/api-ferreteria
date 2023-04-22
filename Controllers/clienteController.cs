@@ -14,7 +14,7 @@ namespace api_ferreteria.Controllers
     {
 
         [HttpPost]
-        [Route("saveCliente")]
+        [Route("saveClients")]
         public dynamic saveClient(requesClient model)
         {
             return Ok(new csCliente().insertClient(model.nombre, model.apellido, model.DPI));
@@ -23,7 +23,7 @@ namespace api_ferreteria.Controllers
 
 
         [HttpPost]
-        [Route("updateClient")]
+        [Route("updateClients")]
         public dynamic updateClient(requesClient model)
         {
             return Ok(new csCliente().updateClient(model.idCliente, model.nombre, model.apellido, model.DPI));
@@ -31,22 +31,23 @@ namespace api_ferreteria.Controllers
 
 
         [HttpPost]
-        [Route("deleteClient")]
+        [Route("deleteClients")]
         public dynamic deleteClient(requestDeleteCliente model)
         {
-            return Ok(new csCliente().deleteClient(model.idClient));
+
+            return Ok(new csCliente().deleteClient(model.idCliente));
 
         }
 
         [HttpGet]
-        [Route("listClient")]
+        [Route("listClients")]
         public dynamic listClients()
         {
             return Ok(new csCliente().listClient());
         }
 
         [HttpGet]
-        [Route("listClientById")]
+        [Route("listClientsById")]
         public dynamic listClientsById(string IdCliente)
         {
 
