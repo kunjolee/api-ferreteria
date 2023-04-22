@@ -96,7 +96,7 @@ namespace api_ferreteria.Models.article
             return result;
 
         }
-
+        
         public responseArticle deleteArticle(int idArticulo)
         {
 
