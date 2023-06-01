@@ -184,11 +184,13 @@ namespace api_ferreteria.Models.User
                 //vamos a llenar la tabla temporal dataAdapter a una tabla completa "dsi-DataSet"
                 da.Fill(dsi);
                 dsi.Tables[0].TableName = "Users"; //agregar un nombre a la tabla
+                cn.Close();
                 return dsi;
 
             }
             catch (Exception e)
             {
+                cn.Close();
                 return null;
             }
         }
@@ -211,11 +213,13 @@ namespace api_ferreteria.Models.User
 
                 da.Fill(dsi);
                 dsi.Tables[0].TableName = "User";
+                cn.Close();
                 return dsi;
 
             }
             catch (Exception e)
             {
+                cn.Close();
                 return null;
             }
         }

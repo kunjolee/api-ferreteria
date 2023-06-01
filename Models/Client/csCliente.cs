@@ -157,11 +157,13 @@ namespace api_ferreteria.Models.Client
 
                 da.Fill(dsi);
                 dsi.Tables[0].TableName = "Client"; 
+                cn.Close();
                 return dsi;
 
             }
             catch (Exception e)
             {
+                cn.Close();
                 return null;
             }
         }
@@ -186,11 +188,13 @@ namespace api_ferreteria.Models.Client
 
                 da.Fill(dsi);
                 dsi.Tables[0].TableName = "Client";
+                cn.Close();
                 return dsi;
 
             }
             catch (Exception e)
             {
+                cn.Close();
                 return null;
             }
         }

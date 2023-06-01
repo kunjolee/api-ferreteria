@@ -21,9 +21,13 @@
   <ItemGroup>
     <None Remove="Models\" />
     <None Remove="Models\FormaPago\" />
+    <None Remove="Models\Factura\" />
+    <None Remove="Models\FacturaDetalle\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Models\FormaPago\" />
+    <Folder Include="Models\Factura\" />
+    <Folder Include="Models\FacturaDetalle\" />
   </ItemGroup>
 </Project>

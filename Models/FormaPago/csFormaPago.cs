@@ -156,11 +156,13 @@ namespace api_ferreteria.Models.FormaPago
                 //vamos a llenar la tabla temporal dataAdapter a una tabla completa "dsi-DataSet"
                 da.Fill(dsi);
                 dsi.Tables[0].TableName = "FormaPago"; //agregar un nombre a la tabla
+                cn.Close();
                 return dsi;
 
             }
             catch (Exception e)
             {
+                cn.Close();
                 return null;
             }
         }
@@ -183,11 +185,13 @@ namespace api_ferreteria.Models.FormaPago
 
                 da.Fill(dsi);
                 dsi.Tables[0].TableName = "FormaPago";
+                cn.Close();
                 return dsi;
 
             }
             catch (Exception e)
             {
+                cn.Close();
                 return null;
             }
         }

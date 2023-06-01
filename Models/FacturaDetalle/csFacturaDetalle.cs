@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Data;
-using static api_ferreteria.Models.article.csArticleStructure;
+using static api_ferreteria.Models.FacturaDetalle.csFacturaDetalleStructure;
 
 
-namespace api_ferreteria.Models.article
+namespace api_ferreteria.Models.FacturaDetalle
 {
-	public class csArticle
-	{
+    public class csFacturaDetalle
+    {
         //esta clase tendra el CRUD
 
 
-        public responseArticle insertArticle(int idArticulo, string nombre, int stock, double precio)
+        public responseFacturaDetalle insertFacturaDetalle(int idFactura, int idArticulo, int cantidad , double subtotal)
         {
 
-            responseArticle result = new responseArticle();
+            responseFacturaDetalle result = new responseFacturaDetalle();
 
             string connection = "";
             SqlConnection cn = null;
@@ -26,25 +26,22 @@ namespace api_ferreteria.Models.article
 
 
 
-                string query = "insert into Articulo(Nombre,Stock, Precio) values " +
-                    " ('" + nombre + "', " + stock + ", " + precio + " )";
+                string query = "insert into FacturaDetalle(idFactura,idArticulo, Cantidad, SubTotal) values " +
+                    "(" + idFactura+ ", " + idArticulo+ " , " + cantidad + ", " + subtotal + ")";
 
                 cn.Open();
 
                 SqlCommand cmd = new SqlCommand(query, cn);
 
-                result.response = cmd.ExecuteNonQuery();//ejecuta el query en la db -> 1 | 0
-                if (result.response == 0)
-                {
-                    throw new Exception("Something went wrong");
-                }
-                result.response_description = "Article saved succesfully";
+                result.response = Convert.ToInt32(cmd.ExecuteScalar());
+
+                result.response_description = "FacturaDetalle saved succesfully";
 
             }
             catch (Exception e)
             {
                 result.response = 0;
-                result.response_description = "Error saving article: " + e.Message.ToString();
+                result.response_description = "Error saving FacturaDetalle: " + e.Message.ToString();
             }
 
             cn.Close();
@@ -53,10 +50,10 @@ namespace api_ferreteria.Models.article
 
         }
 
-        public responseArticle updateArticle(int idArticulo, string nombre, int stock, double precio)
+        public responseFacturaDetalle updateFacturaDetalle(int idFacturaDetalle, int idFactura, int idArticulo, int cantidad, double subtotal)
         {
 
-            responseArticle result = new responseArticle();
+            responseFacturaDetalle result = new responseFacturaDetalle();
 
             string connection = "";
             SqlConnection cn = null;
@@ -67,9 +64,9 @@ namespace api_ferreteria.Models.article
                 cn = new SqlConnection(connection);
 
 
-                string query = "update Articulo " +
-                "set Nombre = '"+ nombre +"', Stock = "+stock+", Precio = "+precio+" " +
-                "where IdArticulo = "+idArticulo+" ";
+                string query = "update FacturaDetalle " +
+                "set idFactura = " + idFactura + ", idArticulo = " + idArticulo+ ", cantidad = " + cantidad + " , subtotal=" + subtotal+ " " +
+                " where IdFacturaDetalle = " + idFacturaDetalle + " ";
 
                 cn.Open();
 
@@ -82,13 +79,13 @@ namespace api_ferreteria.Models.article
                     throw new Exception("Something went wrong");
                 }
 
-                result.response_description = "Article updated succesfully";
+                result.response_description = "FacturaDetalle updated succesfully";
 
             }
             catch (Exception e)
             {
                 result.response = 0;
-                result.response_description = "Error updating article: " + e.Message.ToString();
+                result.response_description = "Error updating FacturaDetalle: " + e.Message.ToString();
             }
 
             cn.Close();
@@ -96,11 +93,11 @@ namespace api_ferreteria.Models.article
             return result;
 
         }
-        
-        public responseArticle deleteArticle(int idArticulo)
+
+        public responseFacturaDetalle deleteFacturaDetalle(int idFacturaDetalle)
         {
 
-            responseArticle result = new responseArticle();
+            responseFacturaDetalle result = new responseFacturaDetalle();
 
             string connection = "";
             SqlConnection cn = null;
@@ -111,7 +108,7 @@ namespace api_ferreteria.Models.article
                 cn = new SqlConnection(connection);
 
 
-                string query = "delete from Articulo where IdArticulo = "+idArticulo+"";
+                string query = "delete from FacturaDetalle where IdFacturaDetalle = " + idFacturaDetalle + "";
 
                 cn.Open();
 
@@ -124,13 +121,13 @@ namespace api_ferreteria.Models.article
                     throw new Exception("Something went wrong");
                 }
 
-                result.response_description = "Article deleted succesfully";
+                result.response_description = "FacturaDetalle deleted succesfully";
 
             }
             catch (Exception e)
             {
                 result.response = 0;
-                result.response_description = "Error deliting article: " + e.Message.ToString();
+                result.response_description = "Error deliting FacturaDetalle: " + e.Message.ToString();
             }
 
             cn.Close();
@@ -140,7 +137,8 @@ namespace api_ferreteria.Models.article
         }
 
         //DataSet es una tabla de datos (tiene que tener los mismos campos que mi tabla de mi DB)
-        public DataSet listArticles() {
+        public DataSet listFacturaDetalle()
+        {
 
             DataSet dsi = new DataSet();
             string connection = System.Configuration.ConfigurationManager.ConnectionStrings["cnConection"].ConnectionString;
@@ -150,7 +148,7 @@ namespace api_ferreteria.Models.article
 
             try
             {
-                string query = "select * from Articulo";
+                string query = "select * from FacturaDetalle";
 
                 SqlCommand cmd = new SqlCommand(query, cn);
 
@@ -159,17 +157,19 @@ namespace api_ferreteria.Models.article
 
                 //vamos a llenar la tabla temporal dataAdapter a una tabla completa "dsi-DataSet"
                 da.Fill(dsi);
-                dsi.Tables[0].TableName = "Articles"; //agregar un nombre a la tabla
+                dsi.Tables[0].TableName = "FacturaDetalles"; //agregar un nombre a la tabla
                 cn.Close();
                 return dsi;
 
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 cn.Close();
-                return null; 
+                return null;
             }
         }
-        public DataSet listArticlesById(int idArticulo) {
+        public DataSet listFacturaDetalleById(int idFacturaDetalle)
+        {
 
             DataSet dsi = new DataSet();
             string connection = System.Configuration.ConfigurationManager.ConnectionStrings["cnConection"].ConnectionString;
@@ -179,21 +179,22 @@ namespace api_ferreteria.Models.article
 
             try
             {
-                string query = "select * from Articulo where idArticulo="+idArticulo+"";
+                string query = "select * from FacturaDetalle where idFacturaDetalle=" + idFacturaDetalle + "";
 
                 SqlCommand cmd = new SqlCommand(query, cn);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
 
                 da.Fill(dsi);
-                dsi.Tables[0].TableName = "Article"; 
+                dsi.Tables[0].TableName = "FacturaDetalle";
                 cn.Close();
                 return dsi;
 
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 cn.Close();
-                return null; 
+                return null;
             }
         }
     }
