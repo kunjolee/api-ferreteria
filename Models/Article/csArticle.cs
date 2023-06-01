@@ -11,10 +11,10 @@ namespace api_ferreteria.Models.article
         //esta clase tendra el CRUD
 
 
-        public responseArticle insertArticle(int idArticulo, string nombre, int stock, double precio)
+        public responseArticleWithId insertArticle(int idArticulo, string nombre, int stock, double precio)
         {
 
-            responseArticle result = new responseArticle();
+            responseArticleWithId result = new responseArticleWithId();
 
             string connection = "";
             SqlConnection cn = null;
@@ -26,18 +26,14 @@ namespace api_ferreteria.Models.article
 
 
 
-                string query = "insert into Articulo(Nombre,Stock, Precio) values " +
+                string query = "insert into Articulo(Nombre,Stock, Precio) OUTPUT inserted.idArticulo values " +
                     " ('" + nombre + "', " + stock + ", " + precio + " )";
 
                 cn.Open();
 
                 SqlCommand cmd = new SqlCommand(query, cn);
-
-                result.response = cmd.ExecuteNonQuery();//ejecuta el query en la db -> 1 | 0
-                if (result.response == 0)
-                {
-                    throw new Exception("Something went wrong");
-                }
+                result.idArticulo = Convert.ToInt32(cmd.ExecuteScalar());
+                result.response = 1;
                 result.response_description = "Article saved succesfully";
 
             }
@@ -160,10 +156,12 @@ namespace api_ferreteria.Models.article
                 //vamos a llenar la tabla temporal dataAdapter a una tabla completa "dsi-DataSet"
                 da.Fill(dsi);
                 dsi.Tables[0].TableName = "Articles"; //agregar un nombre a la tabla
+                cn.Close();
                 return dsi;
 
             }catch(Exception e)
             {
+                cn.Close();
                 return null; 
             }
         }
@@ -185,10 +183,12 @@ namespace api_ferreteria.Models.article
 
                 da.Fill(dsi);
                 dsi.Tables[0].TableName = "Article"; 
+                cn.Close();
                 return dsi;
 
             }catch(Exception e)
             {
+                cn.Close();
                 return null; 
             }
         }

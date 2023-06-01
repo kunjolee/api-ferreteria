@@ -12,9 +12,9 @@ namespace api_ferreteria.Models.FormaPago
 	{
 		//CRUD methods
 
-		public responseFormaPago insertFormaPago (int idPago, string tipo)
+		public responsePagoWithId insertFormaPago (int idPago, string tipo)
 		{
-			responseFormaPago result = new responseFormaPago();
+            responsePagoWithId result = new responsePagoWithId();
 			string connection = "";
 			SqlConnection cn = null;
 
@@ -24,19 +24,15 @@ namespace api_ferreteria.Models.FormaPago
 				connection = System.Configuration.ConfigurationManager.ConnectionStrings["cnConection"].ConnectionString;
 				cn = new SqlConnection(connection);
 
-				string query = "insert into FormaPago(Tipo) values " +
+				string query = "insert into FormaPago(Tipo) OUTPUT inserted.idPago values " +
 					"('" + tipo + "' ) ";
 
 				cn.Open();
 
                 SqlCommand cmd = new SqlCommand(query, cn);
 
-				result.response = cmd.ExecuteNonQuery(); //-> 1 | 0
-
-                if (result.response == 0)
-                {
-                    throw new Exception("Something went wrong");
-                }
+                result.idPago = Convert.ToInt32(cmd.ExecuteScalar());
+                result.response = 1;
 
                 result.response_description = "Forma pago saved successfully";
 
@@ -156,11 +152,13 @@ namespace api_ferreteria.Models.FormaPago
                 //vamos a llenar la tabla temporal dataAdapter a una tabla completa "dsi-DataSet"
                 da.Fill(dsi);
                 dsi.Tables[0].TableName = "FormaPago"; //agregar un nombre a la tabla
+                cn.Close();
                 return dsi;
 
             }
             catch (Exception e)
             {
+                cn.Close();
                 return null;
             }
         }
@@ -183,11 +181,13 @@ namespace api_ferreteria.Models.FormaPago
 
                 da.Fill(dsi);
                 dsi.Tables[0].TableName = "FormaPago";
+                cn.Close();
                 return dsi;
 
             }
             catch (Exception e)
             {
+                cn.Close();
                 return null;
             }
         }

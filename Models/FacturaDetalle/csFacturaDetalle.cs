@@ -1,37 +1,21 @@
-﻿
-
-using System.Data;
+﻿using System;
 using System.Data.SqlClient;
-using static api_ferreteria.Models.article.csArticleStructure;
-using static api_ferreteria.Models.User.csUserStructure;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Data;
+using static api_ferreteria.Models.FacturaDetalle.csFacturaDetalleStructure;
 
-namespace api_ferreteria.Models.User
 
+namespace api_ferreteria.Models.FacturaDetalle
 {
-    public class csUser
+    public class csFacturaDetalle
     {
-        /* CRUD */
-        //3 queries
-        // insert into table (attribute1, attribute2) values (attribute1, attribute2)
-
-        // update table set attribute1 = 'new value', attribute2 = 'new vaue'
-        // delete from table where attribute1 = "una condicion"
-        // delete from User where IdUser = 1
-
-        //string query = "update Articulo " +
-        //"set Nombre = '" + nombre + "', Stock = " + stock + ", Precio = " + precio + " " +
-        //"where IdArticulo = " + idArticulo + " ";
-
-        //"delete from Articulo where IdArticulo = "+idArticulo+"";
+        //esta clase tendra el CRUD
 
 
-
-
-        //POST
-        public responseUserWithId insertUser(int idUsuario, string correo, string telefono, string direccion, string fechaNacimiento)
+        public responseFacturaDetalle insertFacturaDetalle(int idFactura, int idArticulo, int cantidad , double subtotal)
         {
-            responseUserWithId result = new responseUserWithId();
+
+            responseFacturaDetalle result = new responseFacturaDetalle();
+
             string connection = "";
             SqlConnection cn = null;
 
@@ -41,83 +25,35 @@ namespace api_ferreteria.Models.User
                 cn = new SqlConnection(connection);
 
 
-                string query = "insert into Usuario(Correo, Telefono, Direccion, FechaNacimiento )" +
-                    " OUTPUT inserted.idUsuario values( '" + correo + "', '" + telefono + "', '" + direccion + "', '" + fechaNacimiento + "' )";
 
-
+                string query = "insert into FacturaDetalle(idFactura,idArticulo, Cantidad, SubTotal) values " +
+                    "(" + idFactura+ ", " + idArticulo+ " , " + cantidad + ", " + subtotal + ")";
 
                 cn.Open();
+
                 SqlCommand cmd = new SqlCommand(query, cn);
 
-                result.idUsuario = Convert.ToInt32(cmd.ExecuteScalar());
-                result.response = 1;
-                result.response_description = "User saved succesfully";
+                result.response = Convert.ToInt32(cmd.ExecuteScalar());
 
+                result.response_description = "FacturaDetalle saved succesfully";
 
             }
-            catch (Exception error)
+            catch (Exception e)
             {
                 result.response = 0;
-                result.response_description = "Error saving user: " + error.Message.ToString();
+                result.response_description = "Error saving FacturaDetalle: " + e.Message.ToString();
             }
-
 
             cn.Close();
 
             return result;
+
         }
 
-        public responseUser updateUser(int idUsuario, string correo, string telefono, string direccion, string fechaNacimiento)
-        {
-            responseUser result = new responseUser();
-            string connection = "";
-            SqlConnection cn = null;
-
-            try
-            {
-                connection = System.Configuration.ConfigurationManager.ConnectionStrings["cnConection"].ConnectionString;
-                cn = new SqlConnection(connection);
-
-
-                /*string query = "update Usuario " + 
-                    "set Correo = '"+ correo + "', Telefono = "+ telefono + ", Direccion = "+ direccion +", FechaNacimiento = "+fechaNacimiento + " " +
-                     "where IdUsuario = " + idUsuario + " ";*/
-
-                string query = "update Usuario " +
-                "set Correo = '" + correo + "', Telefono = '" + telefono + "', Direccion = '" + direccion + "', FechaNacimiento = '" + fechaNacimiento + "' " +
-                "where IdUsuario = " + idUsuario + " ";
-
-                cn.Open();
-                SqlCommand cmd = new SqlCommand(query, cn);
-
-                result.response = cmd.ExecuteNonQuery();
-                if (result.response == 0)
-                {
-                    throw new Exception("Something went wrong");
-                }
-
-
-                result.response_description = "User updated succesfully";
-
-
-            }
-            catch (Exception error)
-            {
-                result.response = 0;
-                result.response_description = "Error updating user: " + error.Message.ToString();
-            }
-
-
-            cn.Close();
-
-            return result;
-        }
-
-
-        public responseUser deleteUser(int idUsuario)
+        public responseFacturaDetalle updateFacturaDetalle(int idFacturaDetalle, int idFactura, int idArticulo, int cantidad, double subtotal)
         {
 
-            responseUser result = new responseUser();
+            responseFacturaDetalle result = new responseFacturaDetalle();
 
             string connection = "";
             SqlConnection cn = null;
@@ -128,7 +64,9 @@ namespace api_ferreteria.Models.User
                 cn = new SqlConnection(connection);
 
 
-                string query = "delete from Usuario where idUsuario = " + idUsuario + "";
+                string query = "update FacturaDetalle " +
+                "set idFactura = " + idFactura + ", idArticulo = " + idArticulo+ ", cantidad = " + cantidad + " , subtotal=" + subtotal+ " " +
+                " where IdFacturaDetalle = " + idFacturaDetalle + " ";
 
                 cn.Open();
 
@@ -141,13 +79,13 @@ namespace api_ferreteria.Models.User
                     throw new Exception("Something went wrong");
                 }
 
-                result.response_description = "User deleted succesfully";
+                result.response_description = "FacturaDetalle updated succesfully";
 
             }
             catch (Exception e)
             {
                 result.response = 0;
-                result.response_description = "Error deliting User: " + e.Message.ToString();
+                result.response_description = "Error updating FacturaDetalle: " + e.Message.ToString();
             }
 
             cn.Close();
@@ -156,9 +94,50 @@ namespace api_ferreteria.Models.User
 
         }
 
+        public responseFacturaDetalle deleteFacturaDetalle(int idFacturaDetalle)
+        {
+
+            responseFacturaDetalle result = new responseFacturaDetalle();
+
+            string connection = "";
+            SqlConnection cn = null;
+
+            try
+            {
+                connection = System.Configuration.ConfigurationManager.ConnectionStrings["cnConection"].ConnectionString;
+                cn = new SqlConnection(connection);
+
+
+                string query = "delete from FacturaDetalle where IdFacturaDetalle = " + idFacturaDetalle + "";
+
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(query, cn);
+
+                result.response = cmd.ExecuteNonQuery();//ejecuta el query en la db -> 1 | 0
+
+                if (result.response == 0)
+                {
+                    throw new Exception("Something went wrong");
+                }
+
+                result.response_description = "FacturaDetalle deleted succesfully";
+
+            }
+            catch (Exception e)
+            {
+                result.response = 0;
+                result.response_description = "Error deliting FacturaDetalle: " + e.Message.ToString();
+            }
+
+            cn.Close();
+
+            return result;
+
+        }
 
         //DataSet es una tabla de datos (tiene que tener los mismos campos que mi tabla de mi DB)
-        public DataSet listUsers()
+        public DataSet listFacturaDetalle()
         {
 
             DataSet dsi = new DataSet();
@@ -169,7 +148,7 @@ namespace api_ferreteria.Models.User
 
             try
             {
-                string query = "select * from Usuario";
+                string query = "select * from FacturaDetalle";
 
                 SqlCommand cmd = new SqlCommand(query, cn);
 
@@ -178,7 +157,7 @@ namespace api_ferreteria.Models.User
 
                 //vamos a llenar la tabla temporal dataAdapter a una tabla completa "dsi-DataSet"
                 da.Fill(dsi);
-                dsi.Tables[0].TableName = "Users"; //agregar un nombre a la tabla
+                dsi.Tables[0].TableName = "FacturaDetalles"; //agregar un nombre a la tabla
                 cn.Close();
                 return dsi;
 
@@ -189,7 +168,7 @@ namespace api_ferreteria.Models.User
                 return null;
             }
         }
-        public DataSet listUsersById(int idUsuario)
+        public DataSet listFacturaDetalleById(int idFacturaDetalle)
         {
 
             DataSet dsi = new DataSet();
@@ -200,14 +179,14 @@ namespace api_ferreteria.Models.User
 
             try
             {
-                string query = "select * from Usuario where idUsuario=" + idUsuario + "";
+                string query = "select * from FacturaDetalle where idFacturaDetalle=" + idFacturaDetalle + "";
 
                 SqlCommand cmd = new SqlCommand(query, cn);
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
 
                 da.Fill(dsi);
-                dsi.Tables[0].TableName = "User";
+                dsi.Tables[0].TableName = "FacturaDetalle";
                 cn.Close();
                 return dsi;
 
@@ -219,8 +198,5 @@ namespace api_ferreteria.Models.User
             }
         }
     }
-
 }
-
-
 

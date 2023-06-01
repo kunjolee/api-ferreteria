@@ -23,6 +23,13 @@ namespace api_ferreteria.Models.article
 			public string response_description { get; set; } //-> message success | failed
 		}
 
+		public class responseArticleWithId
+		{
+            public int response { get; set; } //-> 0 | 1
+            public string response_description { get; set; } //-> message success | failed
+			public int idArticulo { get; set; }
+        }
+
 		//cada request es el body que recibo de postman	
 		public class requestDeleteArticle
 		{

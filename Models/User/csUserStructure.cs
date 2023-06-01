@@ -19,6 +19,12 @@
             public string response_description { get; set; } //-> message success | failed
         }
 
+        public class responseUserWithId
+        {
+            public int response { get; set; } //-> 0 | 1
+            public string response_description { get; set; } //-> message success | failed
+            public int idUsuario { get; set; }
+        }
         public class requestDelteUser 
         { 
             public int idUsuario { get; set; }
