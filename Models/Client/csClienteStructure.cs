@@ -17,6 +17,13 @@
             public string response_description { get; set; } //-> message success | failed
         }
 
+        public class responseClientWithId
+        {
+            public int response { get; set; } //-> 0 | 1
+            public string response_description { get; set; } //-> message success | failed
+            public int idCliente { get; set; }
+        }
+
         public class requestDeleteCliente
         {
             public int idCliente { get; set; }

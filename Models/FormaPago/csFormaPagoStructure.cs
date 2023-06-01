@@ -17,7 +17,14 @@ namespace api_ferreteria.Models.FormaPago
             public string response_description { get; set; } 
 		}
 
-		public class requestDeleteFormaPago
+        public class responsePagoWithId
+        {
+            public int response { get; set; } //-> 0 | 1
+            public string response_description { get; set; } //-> message success | failed
+            public int idPago { get; set; }
+        }
+
+        public class requestDeleteFormaPago
 		{
 			public int idPago { get; set; }
 		}

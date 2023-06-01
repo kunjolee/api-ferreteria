@@ -9,10 +9,10 @@ namespace api_ferreteria.Models.Client
     public class csCliente
     {
         //MVC
-        public responseClient insertClient(string nombre, string apellido, int DPI)
+        public responseClientWithId insertClient(string nombre, string apellido, int DPI)
         {
 
-            responseClient result = new responseClient();
+            responseClientWithId result = new responseClientWithId();
 
             string connection = "";
             SqlConnection cn = null;
@@ -24,18 +24,15 @@ namespace api_ferreteria.Models.Client
 
 
 
-                string query = "insert into Cliente(nombre,apellido,DPI) values " +
+                string query = "insert into Cliente(nombre,apellido,DPI) OUTPUT inserted.idCliente values " +
                     " ('" + nombre + "', '" + apellido + "', '" + DPI + "' )";
 
                 cn.Open();
 
                 SqlCommand cmd = new SqlCommand(query, cn);
-
-                result.response = cmd.ExecuteNonQuery();
-                if (result.response == 0)
-                {
-                    throw new Exception("Something went wrong");
-                }
+                
+                result.idCliente = Convert.ToInt32(cmd.ExecuteScalar());
+                result.response = 1;
                 result.response_description = "Client saved succesfully";
 
             }

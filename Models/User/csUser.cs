@@ -29,9 +29,9 @@ namespace api_ferreteria.Models.User
 
 
         //POST
-        public responseUser insertUser(int idUsuario, string correo, string telefono, string direccion, string fechaNacimiento)
+        public responseUserWithId insertUser(int idUsuario, string correo, string telefono, string direccion, string fechaNacimiento)
         {
-            responseUser result = new responseUser();
+            responseUserWithId result = new responseUserWithId();
             string connection = "";
             SqlConnection cn = null;
 
@@ -42,20 +42,15 @@ namespace api_ferreteria.Models.User
 
 
                 string query = "insert into Usuario(Correo, Telefono, Direccion, FechaNacimiento )" +
-                    " values( '" + correo + "', '" + telefono + "', '" + direccion + "', '" + fechaNacimiento + "' )";
+                    " OUTPUT inserted.idUsuario values( '" + correo + "', '" + telefono + "', '" + direccion + "', '" + fechaNacimiento + "' )";
 
 
 
                 cn.Open();
                 SqlCommand cmd = new SqlCommand(query, cn);
 
-                result.response = cmd.ExecuteNonQuery();
-                if (result.response == 0)
-                {
-                    throw new Exception("Something went wrong");
-                }
-
-
+                result.idUsuario = Convert.ToInt32(cmd.ExecuteScalar());
+                result.response = 1;
                 result.response_description = "User saved succesfully";
 
 
