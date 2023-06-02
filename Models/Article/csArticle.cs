@@ -11,7 +11,7 @@ namespace api_ferreteria.Models.article
         //esta clase tendra el CRUD
 
 
-        public responseArticleWithId insertArticle(int idArticulo, string nombre, int stock, double precio)
+        public responseArticleWithId insertArticle(string nombre, int stock, double precio)
         {
 
             responseArticleWithId result = new responseArticleWithId();

@@ -15,7 +15,7 @@ namespace api_ferreteria.Controllers
 		[HttpPost]
 		[Route("saveArticle")]
 		public dynamic saveArticle(requestArticle model) {
-            return Ok(new csArticle().insertArticle(model.idArticulo, model.nombre, model.stock, model.precio));
+            return Ok(new csArticle().insertArticle(model.nombre, model.stock, model.precio));
 
         }
 
